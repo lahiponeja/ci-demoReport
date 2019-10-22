@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<arquillian xmlns="http://jboss.org/schema/arquillian"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+	<extension qualifier="webdriver">
+	<property name="browser">phantomjs</property>
+		<!-- 		<property name="browser">chromeHeadless</property> -->
+<!-- 		<property name="chromeArguments">headless</property> -->
+		<!-- <property name="chrome.binary">C:\Program Files (x86)\Google\Chrome\Application\chrome.exe</property> -->
+		<!-- <property name="chromeDriverBinary">C:\Proyectos\Cloud\arquillian-liferay-master\chromedriver.exe</property> -->
+		<!-- <property name="remote">true</property>
+		<property name="remoteReusable">false</property>
+		<property name="remoteAddress">http://zalenium:80/wd/hub</property>-->
+
+	</extension>
+
+	<extension qualifier="graphene">
+		<property name="url">http://localhost:8080</property>
+	</extension>
+
+	<extension qualifier="jacoco">
+		<property name="excludes">com.ricoh.cidemo.test</property>
+		<property name="includes">com.ricoh.cidemo.*</property>
+	</extension>
+
+	<engine>
+		<property name="deploymentExportPath">build/deployments</property>
+	</engine>
+
+	<container qualifier="aries" default="true">
+	    <configuration>
+			<!--
+			<property name="jmxServiceURL">service:jmx:rmi://liferay-testing:8099/jndi/rmi://liferay-testing:8099/jmxrmi</property>
+			-->
+			<property name="jmxServiceURL">service:jmx:rmi:///jndi/rmi://localhost:8099/jmxrmi</property>
+	    </configuration>
+	</container>
+
+</arquillian>

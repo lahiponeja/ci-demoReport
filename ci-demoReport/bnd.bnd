@@ -1,0 +1,6 @@
+Bundle-Name: ci-demoReport
+Bundle-SymbolicName: com.ricoh.cidemo.report.portlet
+Bundle-Version: 1.0.0
+Export-Package: com.ricoh.cidemo.report.portlet.constants
+Import-Package: antlr;resolution:=optional
+Import-Package: *;resolution:=optional

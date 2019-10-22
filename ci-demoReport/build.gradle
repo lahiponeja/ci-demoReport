@@ -1,0 +1,198 @@
+buildscript {
+	dependencies {
+		//classpath group: "com.liferay", name: "com.liferay.gradle.plugins.workspace", version: "2.0.4"
+		//classpath group: "com.liferay", name: "com.liferay.gradle.plugins", version: "3.2.40"
+		
+		//classpath group: "net.saliman", name: "gradle-properties-plugin", version: "1.4.6"
+		classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1"
+	}
+
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+		maven {
+			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+		}
+	}
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	jcenter()
+	maven {
+		url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+	}
+}
+
+apply plugin: "jacoco"
+apply plugin: "org.sonarqube" 
+
+sonarqube {
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.projectName", "CI Demo Report"
+        property "sonar.projectDescription", "CI Liferay Demo Report"
+        property "sonar.projectKey", "com.ricoh.cidemo.report"
+        property "sonar.jacoco.reportPath", "${rootDir}/build/jacoco/testIntegration.exec"
+    }
+}
+
+
+setUpTestableTomcat {
+    enabled = false
+}
+
+startTestableTomcat {
+    enabled = false
+}
+
+stopTestableTomcat {
+    enabled = false
+}
+
+
+ext {
+    seleniumVersion='3.141.59'
+}
+
+
+dependencies {
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.util.taglib"
+	compileOnly group: 'com.liferay.portal', name: "com.liferay.portal.test"
+	compileOnly group: "javax.portlet", name: "portlet-api"
+	compileOnly group: "javax.servlet", name: "javax.servlet-api"
+	compileOnly group: "javax.websocket", name: "javax.websocket-api", version: "1.1"
+	compileOnly group: "jstl", name: "jstl"
+	
+	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
+	
+	compileOnly group: "org.osgi", name: "osgi.cmpn", version: "6.0.0"
+    compileOnly group: "org.osgi", name: "osgi.core", version: "6.0.0"
+	compileOnly group: 'commons-io', name: 'commons-io', version: '2.6'
+	
+
+	compileInclude group: 'org.antlr', name: 'antlr4-runtime', version: '4.7.2'
+	compileInclude  group: 'net.sf.jasperreports', name: 'jasperreports', version: '6.9.0'
+	compileInclude  group: 'com.lowagie', name: 'itext', version: '2.1.7'
+	
+	testCompile group: "com.liferay", name: "com.liferay.petra.lang", version: "1.0.0"
+	testCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel"
+	
+		
+// ----------- SELENIUM --------------
+    testIntegrationCompile "org.seleniumhq.selenium:selenium-support:" + seleniumVersion
+    testIntegrationCompile "org.seleniumhq.selenium:selenium-java:" + seleniumVersion
+    testIntegrationCompile "org.seleniumhq.selenium:selenium-api:" + seleniumVersion
+    testIntegrationCompile "org.seleniumhq.selenium:selenium-remote-driver:" + seleniumVersion
+    testIntegrationCompile "org.seleniumhq.selenium:selenium-server:" + seleniumVersion
+
+    testIntegrationCompile "org.jboss.arquillian.selenium:selenium-bom:3.13.0"
+    
+// ----------- ARQUILLIAN ------------
+    testIntegrationCompile group: "com.liferay.arquillian", name: "com.liferay.arquillian.arquillian-container-liferay", version: "1.0.6"
+    testIntegrationCompile group: "org.jboss.arquillian.junit", name: "arquillian-junit-container", version: "1.1.11.Final"
+    testIntegrationCompile group: "org.jboss.arquillian.graphene", name: "graphene-webdriver", version: "2.3.2"
+    testIntegrationCompile group: "org.jboss.arquillian.extension", name: "arquillian-drone-webdriver-depchain", version: "2.5.1"
+    testIntegrationCompile group: "org.jboss.arquillian", name: "arquillian-bom", version: "1.4.1.Final"
+    testIntegrationCompile group: "org.jboss.arquillian.extension", name: "arquillian-drone-bom", version: "2.5.1"
+	testIntegrationCompile group: 'org.jboss.seam.reports', name: 'seam-reports-jasper', version: '3.1.0.Final'
+ 	testIntegrationCompile group: 'net.sf.jpdfunit', name: 'jpdfunit', version: '1.1'
+    
+
+	testIntegrationCompile group: "com.liferay", name: "com.liferay.petra.string", version: "1.0.0"
+	testCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel"
+	
+    testIntegrationCompile 'com.google.code.gson:gson:2.8.5'
+
+    testIntegrationCompile group: "junit", name: "junit", version: "4.12"
+    testIntegrationCompile group: "log4j", name: "log4j", version: "1.2.17"
+    testIntegrationCompile group: "org.slf4j", name: "slf4j-log4j12", version: "1.7.5"
+    
+    testIntegrationCompile group: 'org.antlr', name: 'antlr4-runtime', version: '4.7.2'
+	testIntegrationCompile  group: 'net.sf.jasperreports', name: 'jasperreports', version: '6.9.0'
+	testIntegrationCompile  group: 'com.lowagie', name: 'itext', version: '2.1.7'
+	
+	
+	
+}
+jacoco {
+    toolVersion = "0.7.9"
+}
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+import java.lang.management.*
+import javax.management.ObjectName
+import javax.management.remote.JMXConnectorFactory as JmxFactory
+import javax.management.remote.JMXServiceURL as JmxUrl
+
+liferay {
+    liferayHome = '../../bundles'
+}
+
+task copyPortalExt(type: Copy) {
+	from file('src/testIntegration/resources/portal-ext.properties')
+	into "${liferay.liferayHome}"
+	enabled !(file(liferay.liferayHome).exists())
+}
+
+jar {
+	if (project.hasProperty('dir')) {
+		destinationDir = file(dir);
+		println "destino $destinationDir"
+	}
+}
+
+task dumpJacoco {
+	doLast {
+		//def serverUrl = 'service:jmx:rmi://liferay-testing.default:8099/jndi/rmi://liferay-testing:8099/jmxrmi'
+		def serverUrl = 'service:jmx:rmi://localhost.default:8099/jndi/rmi://localhost:8099/jmxrmi'
+		String beanName = "org.jacoco:type=Runtime"
+		def server = JmxFactory.connect(new JmxUrl(serverUrl)).MBeanServerConnection
+		def gmxb = new GroovyMBean(server, beanName)
+		println "Connected to:\n$gmxb\n"
+		println "Executing dump()"
+		gmxb.dump(true)
+	}
+}
+
+jacocoTestReport {
+	dependsOn dumpJacoco
+	group = "Reporting"
+	reports {
+		xml.enabled true
+		csv.enabled false
+		html.destination "${buildDir}/reports/coverage"
+	}
+	executionData = files("${rootDir}/build/jacoco/testIntegration.exec")
+}
+
+
+
+
+testIntegration {
+//	dependsOn runSeleniumServer
+	finalizedBy jacocoTestReport
+}
+println "Finalizando script de gradle...."
+
+tasks.withType(Test) {
+	testLogging {
+		events TestLogEvent.FAILED,
+				TestLogEvent.PASSED,
+				TestLogEvent.SKIPPED,
+				TestLogEvent.STANDARD_ERROR,
+				TestLogEvent.STANDARD_OUT
+		exceptionFormat TestExceptionFormat.FULL
+		showCauses true
+		showExceptions true
+		showStackTraces true
+	}
+}
+
+
+
+
+
