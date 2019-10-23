@@ -121,11 +121,12 @@ public class CiDemoReportPortletFunctionalTest {
 		return url; 
 	}	
 	
-	@After
-	public void closeBrowser() throws Exception {
+		
+	/*public void closeBrowser() throws Exception {
 		log.info(">>>> CiDemoReportPortletFunctionalTest.closeBrowser()");
 		_browser.close();
 	}
+	*/
 
 	@Drone
 	private WebDriver _browser;
